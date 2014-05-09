@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 public class PaymentMachine {
 	private Map<Integer, Ticket> tickets;
 	private CoinContainer availableCoins;
-	private Ticket selectedTicket;
 	private PaymentMachineState state;
 	private Payment payment;
 
 	private PaymentMachine() {
 		tickets = new HashMap<>();
-		selectedTicket = null;
 		state = PaymentMachineState.IDLE;
 	}
 
@@ -38,15 +34,13 @@ public class PaymentMachine {
 	}
 
 	protected Ticket getTicketById(int ticketId) {
-		Ticket t = tickets.get(ticketId);
-		return t;
+		return tickets.get(ticketId);
 	}
 
 	public void selectTicket(int ticketId) {
 		if (state == PaymentMachineState.IDLE) {
-			selectedTicket = getTicketById(ticketId);
-			payment = new Payment(selectedTicket);
-			if (selectedTicket != null && !selectedTicket.isPaid()) {
+			payment = new Payment(getTicketById(ticketId));
+			if (!payment.isPaid()) {
 				state = PaymentMachineState.PAYING;
 			}
 		}
@@ -55,12 +49,11 @@ public class PaymentMachine {
 	public Map<Integer, Integer> putCoin(int coinType) {
 		Map<Integer, Integer> dropBack = new HashMap<>();
 		if (state == PaymentMachineState.PAYING) {
-			payment.addPayment( coinType);
+			payment.addPayment(coinType);
 			availableCoins.incrementCoin(coinType);
 
 			if (payment.isPaymentPayed()) {
 				state = PaymentMachineState.IDLE;
-				selectedTicket.setPaid(true);
 				int coinToReturn = payment.getReturnAmount();
 				dropBack.putAll(calculateReturnCoins(coinToReturn));
 			}
@@ -79,8 +72,8 @@ public class PaymentMachine {
 			if (type != 0) {
 				coinAmount -= type;
 				availableCoins.decrementCoin(type);
-				Integer prevValue = dropBack.get(type) ;
-				prevValue = prevValue == null? new Integer(0) : prevValue ;
+				Integer prevValue = dropBack.get(type);
+				prevValue = prevValue == null ? new Integer(0) : prevValue;
 				dropBack.put(type, 1 + prevValue);
 			} else {
 				break;
@@ -90,7 +83,7 @@ public class PaymentMachine {
 	}
 
 	public Ticket getSelectedTicket() {
-		return selectedTicket;
+		return payment.getTicket();
 	}
 
 	public int getPaidAmount() {

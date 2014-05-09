@@ -33,7 +33,6 @@ public class PaymentMachineTest {
 	@Test
 	public void getTicketByIdWhenTicketIsNotContained() {
 		PaymentMachine pm = PaymentMachine.createTestPaymentMachine();
-		List<Ticket> tickets = pm.getKnownTickets();
 
 		Ticket actual = pm.getTicketById(9999999);
 
@@ -47,6 +46,7 @@ public class PaymentMachineTest {
 		expected.put(5000, 1);
 		Map<Integer, Integer> actual = pm.calculateReturnCoins(5000);
 
+		assertEquals(actual, expected);
 	}
 
 }

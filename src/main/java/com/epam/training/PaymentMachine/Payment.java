@@ -38,6 +38,13 @@ public class Payment {
 
 	public void addPayment(int amount) {
 		paidAmount += amount;
+		ticket.setPaid(isPaymentPayed());
+	}
 
+	public boolean isPaid() {
+		if (ticket != null) {
+			return ticket.isPaid();
+		}
+		return false;
 	}
 }
