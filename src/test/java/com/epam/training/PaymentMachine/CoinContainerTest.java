@@ -20,8 +20,8 @@ public class CoinContainerTest {
 	public void getBiggestCoinTypeAmountTestWhenBiggerCoinTypeShouldCoinType(){
 		CoinContainer cc = CoinContainer.createTestCoinContainer();
 		
-		int expected = 6000;
-		int actual = cc.getBiggestCoinTypeInAmount(5000);
+		int expected = 5000;
+		int actual = cc.getBiggestCoinTypeInAmount(6000);
 		
 		assertEquals(actual, expected);
 	}
