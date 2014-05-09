@@ -28,16 +28,16 @@ public class Main {
 			System.out.print("Parking ticket is: ");
 			System.out.println(t);
 
-			Map<Integer, Integer> cashBack = new HashMap<>();
+			Map<Coin, Integer> cashBack = new HashMap<>();
 			while (!t.isPaid()) {
-				int nextCoin = readCoin();
-				cashBack = pm.putCoin(nextCoin);
+				Coin insertedCoin = readCoin();
+				cashBack = pm.putCoin(insertedCoin);
 				System.out.printf("payment: %d / %d %n", pm.getPaidAmount(), t.getPrice());
 			}
 			System.out.println("This ticket is paid");
 			if (cashBack.size() > 0) {
 				System.out.println("Change: ");
-				for (Entry<Integer, Integer> entry : cashBack.entrySet()) {
+				for (Entry<Coin, Integer> entry : cashBack.entrySet()) {
 					System.out.printf("banknote \"%d\"  =  %d %n", entry.getKey(), entry.getValue());
 				}
 			}
@@ -70,14 +70,14 @@ public class Main {
 		return parkingTicketId;
 	}
 
-	private static int readCoin() {
-		int nextCoin = 0;
-		while (nextCoin == 0)
+	private static Coin readCoin() {
+		Coin nextCoin = null;
+		while (nextCoin == null)
 		{
 			try {
 				System.out.println("Please enter a coin");
 				String s = br.readLine();
-				nextCoin = Integer.parseInt(s);
+				nextCoin = Coin.getCoinByValue(Integer.parseInt(s));
 			} catch (Exception e) {
 				System.out.println("Invalid coin.");
 			}

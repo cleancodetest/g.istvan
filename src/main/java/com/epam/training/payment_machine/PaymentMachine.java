@@ -46,11 +46,11 @@ public class PaymentMachine {
 		}
 	}
 
-	public Map<Integer, Integer> putCoin(int coinType) {
-		Map<Integer, Integer> dropBack = new HashMap<>();
+	public Map<Coin, Integer> putCoin(Coin coin) {
+		Map<Coin, Integer> dropBack = new HashMap<>();
 		if (state == PaymentMachineState.PAYING) {
-			payment.addPayment(coinType);
-			availableCoins.incrementCoin(coinType);
+			payment.addCoinValue(coin.getValue());
+			availableCoins.incrementCoin(coin);
 
 			if (payment.isPaymentPayed()) {
 				state = PaymentMachineState.IDLE;
@@ -60,21 +60,21 @@ public class PaymentMachine {
 		}
 		else
 		{
-			dropBack.put(coinType, 1);
+			dropBack.put(coin, 1);
 		}
 		return dropBack;
 	}
 
-	protected Map<Integer, Integer> calculateReturnCoins(int coinAmount) {
-		Map<Integer, Integer> dropBack = new HashMap<>();
+	protected Map<Coin, Integer> calculateReturnCoins(int coinAmount) {
+		Map<Coin, Integer> dropBack = new HashMap<>();
 		while (coinAmount >= 5) {
-			int type = availableCoins.getBiggestCoinTypeInAmount(coinAmount);
-			if (type != 0) {
-				coinAmount -= type;
-				availableCoins.decrementCoin(type);
-				Integer prevValue = dropBack.get(type);
+			Coin coin = availableCoins.getBiggestCoinInAmount(coinAmount);
+			if (coin != null) {
+				coinAmount -= coin.getValue();
+				availableCoins.decrementCoin(coin);
+				Integer prevValue = dropBack.get(coin);
 				prevValue = prevValue == null ? new Integer(0) : prevValue;
-				dropBack.put(type, 1 + prevValue);
+				dropBack.put(coin, 1 + prevValue);
 			} else {
 				break;
 			}

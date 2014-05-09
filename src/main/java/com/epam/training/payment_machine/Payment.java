@@ -36,7 +36,7 @@ public class Payment {
 		return getRemainedAmount() <= 0;
 	}
 
-	public void addPayment(int amount) {
+	public void addCoinValue(int amount) {
 		paidAmount += amount;
 		ticket.setPaid(isPaymentPayed());
 	}

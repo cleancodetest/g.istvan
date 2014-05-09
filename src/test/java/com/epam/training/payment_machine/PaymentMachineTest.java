@@ -42,9 +42,9 @@ public class PaymentMachineTest {
 	@Test
 	public void calculateReturnCoinsTest() {
 		PaymentMachine pm = PaymentMachine.createTestPaymentMachine();
-		Map<Integer, Integer> expected = new HashMap<>();
-		expected.put(5000, 1);
-		Map<Integer, Integer> actual = pm.calculateReturnCoins(5000);
+		Map<Coin, Integer> expected = new HashMap<>();
+		expected.put(Coin.BANKNOTE_5000, 1);
+		Map<Coin, Integer> actual = pm.calculateReturnCoins(5000);
 
 		assertEquals(actual, expected);
 	}
