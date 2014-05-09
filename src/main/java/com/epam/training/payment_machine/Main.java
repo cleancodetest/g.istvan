@@ -11,8 +11,7 @@ public class Main {
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static PaymentMachine pm = PaymentMachine.createTestPaymentMachine();
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws IllegalMachineStateTransitionException{
 		System.out.println("----------------------");
 		System.out.println("PaymentMachine created");
 		System.out.println();
@@ -41,13 +40,8 @@ public class Main {
 					System.out.printf("banknote \"%d\"  =  %d %n", entry.getKey(), entry.getValue());
 				}
 			}
-
 			readNext = readBool("Would you like to pay for an other ticket? (true/false)");
-
 		} while (readNext);
-
-		System.out.print("");
-
 	}
 
 	private static int readParkingTicketId() {
@@ -65,7 +59,6 @@ public class Main {
 				System.out.println("This id is not exist, please enter other id!");
 				parkingTicketId = 0;
 			}
-
 		}
 		return parkingTicketId;
 	}

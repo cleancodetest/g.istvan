@@ -21,7 +21,8 @@ public class PaymentMachine {
 
 		for (int i = 0; i < 1000; i++) {
 			Ticket t = new Ticket();
-			machine.tickets.put(t.getId(), TicketPriceGenerator.generateTicketPrice(t));
+			t = TicketPriceGenerator.generateTicketPrice(t);
+			machine.tickets.put(t.getId(), t);
 		}
 
 		machine.availableCoins = CoinContainer.createTestCoinContainer();
@@ -30,19 +31,21 @@ public class PaymentMachine {
 	}
 
 	public List<Ticket> getKnownTickets() {
-		return new ArrayList<Ticket>(tickets.values());
+		return new ArrayList<>(tickets.values());
 	}
 
 	protected Ticket getTicketById(int ticketId) {
 		return tickets.get(ticketId);
 	}
 
-	public void selectTicket(int ticketId) {
+	public void selectTicket(int ticketId) throws IllegalMachineStateTransitionException{
 		if (state == PaymentMachineState.IDLE) {
 			payment = new Payment(getTicketById(ticketId));
 			if (!payment.isPaid()) {
 				state = PaymentMachineState.PAYING;
 			}
+		}else{
+			throw new IllegalMachineStateTransitionException();
 		}
 	}
 
