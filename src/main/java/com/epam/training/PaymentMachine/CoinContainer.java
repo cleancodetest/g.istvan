@@ -14,6 +14,7 @@ public class CoinContainer {
 
 	public void incrementCoin(int coinType) {
 		Integer coinsCount = coinTray.get(coinType);
+		coinsCount = coinsCount == null ? new Integer(0) : coinsCount;
 		coinsCount += 1;
 		coinTray.put(coinType, coinsCount);
 	}

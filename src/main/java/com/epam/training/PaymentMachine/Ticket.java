@@ -36,4 +36,9 @@ public class Ticket {
 	public void setPaid(boolean isPaid) {
 		this.isPaid = isPaid;
 	}
+	
+	@Override
+	public String toString() {
+		return "Ticket [id=" + id + ", price=" + price + ", isPaid=" + isPaid + "]";
+	}
 }

@@ -12,13 +12,12 @@ public class PaymentMachine {
 	private CoinContainer availableCoins;
 	private Ticket selectedTicket;
 	private PaymentMachineState state;
-	private int payedAmount;
+	private Payment payment;
 
 	private PaymentMachine() {
 		tickets = new HashMap<>();
 		selectedTicket = null;
 		state = PaymentMachineState.IDLE;
-		payedAmount = 0;
 	}
 
 	public static PaymentMachine createTestPaymentMachine() {
@@ -38,14 +37,15 @@ public class PaymentMachine {
 		return new ArrayList<Ticket>(tickets.values());
 	}
 
-	public Ticket getTicketById(int ticketId) {
+	protected Ticket getTicketById(int ticketId) {
 		Ticket t = tickets.get(ticketId);
 		return t;
 	}
 
 	public void selectTicket(int ticketId) {
 		if (state == PaymentMachineState.IDLE) {
-			this.selectedTicket = getTicketById(ticketId);
+			selectedTicket = getTicketById(ticketId);
+			payment = new Payment(selectedTicket);
 			if (selectedTicket != null && !selectedTicket.isPaid()) {
 				state = PaymentMachineState.PAYING;
 			}
@@ -55,13 +55,13 @@ public class PaymentMachine {
 	public Map<Integer, Integer> putCoin(int coinType) {
 		Map<Integer, Integer> dropBack = new HashMap<>();
 		if (state == PaymentMachineState.PAYING) {
-			payedAmount += coinType;
+			payment.addPayment( coinType);
 			availableCoins.incrementCoin(coinType);
 
-			if (selectedTicket.getPrice() <= payedAmount) {
+			if (payment.isPaymentPayed()) {
 				state = PaymentMachineState.IDLE;
 				selectedTicket.setPaid(true);
-				int coinToReturn = payedAmount - selectedTicket.getPrice();
+				int coinToReturn = payment.getReturnAmount();
 				dropBack.putAll(calculateReturnCoins(coinToReturn));
 			}
 		}
@@ -87,6 +87,14 @@ public class PaymentMachine {
 			}
 		}
 		return dropBack;
+	}
+
+	public Ticket getSelectedTicket() {
+		return selectedTicket;
+	}
+
+	public int getPaidAmount() {
+		return payment.getPaidAmount();
 	}
 
 }

@@ -47,7 +47,6 @@ public class PaymentMachineTest {
 		expected.put(5000, 1);
 		Map<Integer, Integer> actual = pm.calculateReturnCoins(5000);
 
-		
 	}
 
 }
