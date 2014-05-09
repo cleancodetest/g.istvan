@@ -1,4 +1,4 @@
-package com.epam.training.PaymentMachine;
+package com.epam.training.payment_machine;
 
 public class Payment {
 	private Ticket ticket;

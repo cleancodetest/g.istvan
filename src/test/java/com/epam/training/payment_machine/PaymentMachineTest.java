@@ -1,4 +1,4 @@
-package com.epam.training.PaymentMachine;
+package com.epam.training.payment_machine;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;

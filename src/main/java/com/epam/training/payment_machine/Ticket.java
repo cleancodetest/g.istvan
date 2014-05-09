@@ -1,4 +1,4 @@
-package com.epam.training.PaymentMachine;
+package com.epam.training.payment_machine;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
