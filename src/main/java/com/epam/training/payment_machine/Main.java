@@ -22,6 +22,10 @@ public class Main {
 		boolean readNext = true;
 
 		do {
+			System.out.println();
+			System.out.println("----------------------");
+			System.out.println("Ticket payment event is started.");
+			System.out.println("----------------------");
 			int parkingTicketId = 0;
 			while (parkingTicketId == 0) {
 				parkingTicketId = readParkingTicketId();
