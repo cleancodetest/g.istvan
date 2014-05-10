@@ -1,10 +1,12 @@
 package com.epam.training.payment_machine;
 
+import com.epam.training.payment_machine.exception.InvalidCoinException;
+
 public enum Coin {
 	BANKNOTE_5(5),
 	BANKNOTE_10(10),
 	BANKNOTE_20(20),
-	BANKNOTE_50(20),
+	BANKNOTE_50(50),
 	BANKNOTE_100(100),
 	BANKNOTE_200(200),
 	BANKNOTE_500(500),
@@ -39,9 +41,18 @@ public enum Coin {
 		throw new InvalidCoinException();
 	}
 
+	public boolean isTheSmallestValueCoin() {
+		if (this == Coin.values()[0]) {
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "Banknote " + value;
 	}
-
 }

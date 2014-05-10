@@ -6,23 +6,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.epam.training.payment_machine.exception.IllegalMachineStateException;
+import com.epam.training.payment_machine.exception.TicketNotFoundException;
+
 public class Main {
 
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static PaymentMachine pm = PaymentMachine.createTestPaymentMachine();
 
-	public static void main(String[] args) throws IllegalMachineStateTransitionException{
+	public static void main(String[] args) throws IllegalMachineStateException {
 		System.out.println("----------------------");
 		System.out.println("PaymentMachine created");
 		System.out.println();
 		boolean readNext = true;
 
 		do {
-			int parkingTicketId = readParkingTicketId();
-			System.out.printf("Entered parking ticket id is %d", parkingTicketId);
-			System.out.println();
+			int parkingTicketId = 0;
+			while (parkingTicketId == 0) {
+				parkingTicketId = readParkingTicketId();
+				try {
+					System.out.printf("Entered parking ticket id is %d", parkingTicketId);
+					System.out.println();
 
-			pm.selectTicket(parkingTicketId);
+					pm.selectTicket(parkingTicketId);
+				} catch (TicketNotFoundException e) {
+					System.out.println("This id is not exist, please enter other id!");
+				}
+			}
+
 			Ticket t = pm.getSelectedTicket();
 			System.out.print("Parking ticket is: ");
 			System.out.println(t);
@@ -54,10 +65,6 @@ public class Main {
 				parkingTicketId = Integer.parseInt(s);
 			} catch (Exception e) {
 				System.out.println("Invalid ticket id.");
-			}
-			if (pm.getTicketById(parkingTicketId) == null) {
-				System.out.println("This id is not exist, please enter other id!");
-				parkingTicketId = 0;
 			}
 		}
 		return parkingTicketId;

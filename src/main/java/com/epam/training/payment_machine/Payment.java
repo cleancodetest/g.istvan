@@ -32,13 +32,13 @@ public class Payment {
 		return getRemainedAmount() * -1;
 	}
 
-	public boolean isPaymentPayed() {
-		return getRemainedAmount() <= 0;
+	public boolean isMoneyEnough() {
+		return paidAmount >= ticket.getPrice();
 	}
 
 	public void addCoinValue(int amount) {
 		paidAmount += amount;
-		ticket.setPaid(isPaymentPayed());
+		//ticket.setPaid(isPaymentPayed());
 	}
 
 	public boolean isPaid() {

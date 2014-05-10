@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.epam.training.payment_machine.exception.IllegalMachineStateException;
+import com.epam.training.payment_machine.exception.NotEnoughChangeException;
+import com.epam.training.payment_machine.exception.TicketNotFoundException;
+
 public class PaymentMachine {
 	private Map<Integer, Ticket> tickets;
 	private CoinContainer availableCoins;
@@ -34,18 +38,23 @@ public class PaymentMachine {
 		return new ArrayList<>(tickets.values());
 	}
 
-	protected Ticket getTicketById(int ticketId) {
-		return tickets.get(ticketId);
+	protected Ticket getTicketById(int ticketId) throws TicketNotFoundException {
+		Ticket t = tickets.get(ticketId);
+		if (t == null)
+		{
+			throw new TicketNotFoundException();
+		}
+		return t;
 	}
 
-	public void selectTicket(int ticketId) throws IllegalMachineStateTransitionException{
+	public void selectTicket(int ticketId) throws IllegalMachineStateException, TicketNotFoundException {
 		if (state == PaymentMachineState.IDLE) {
 			payment = new Payment(getTicketById(ticketId));
 			if (!payment.isPaid()) {
 				state = PaymentMachineState.PAYING;
 			}
-		}else{
-			throw new IllegalMachineStateTransitionException();
+		} else {
+			throw new IllegalMachineStateException(PaymentMachineState.IDLE, state);
 		}
 	}
 
@@ -55,32 +64,26 @@ public class PaymentMachine {
 			payment.addCoinValue(coin.getValue());
 			availableCoins.incrementCoin(coin);
 
-			if (payment.isPaymentPayed()) {
+			if (payment.isMoneyEnough()) {
+				
+				if (availableCoins.canGiveChangeBack(payment.getRemainedAmount())){
+					int coinToReturn = payment.getReturnAmount();
+					try {
+						dropBack.putAll(availableCoins.doReturnCoins(coinToReturn));
+					} catch (NotEnoughChangeException e) {
+						assert false : "Can't be thrown";
+					}	
+				}else{
+					// give back all money
+				}
+				
 				state = PaymentMachineState.IDLE;
-				int coinToReturn = payment.getReturnAmount();
-				dropBack.putAll(calculateReturnCoins(coinToReturn));
+				payment = null;
 			}
 		}
 		else
 		{
 			dropBack.put(coin, 1);
-		}
-		return dropBack;
-	}
-
-	protected Map<Coin, Integer> calculateReturnCoins(int coinAmount) {
-		Map<Coin, Integer> dropBack = new HashMap<>();
-		while (coinAmount >= 5) {
-			Coin coin = availableCoins.getBiggestCoinInAmount(coinAmount);
-			if (coin != null) {
-				coinAmount -= coin.getValue();
-				availableCoins.decrementCoin(coin);
-				Integer prevValue = dropBack.get(coin);
-				prevValue = prevValue == null ? new Integer(0) : prevValue;
-				dropBack.put(coin, 1 + prevValue);
-			} else {
-				break;
-			}
 		}
 		return dropBack;
 	}

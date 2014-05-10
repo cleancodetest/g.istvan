@@ -1,4 +1,4 @@
-package com.epam.training.payment_machine;
+package com.epam.training.payment_machine.exception;
 
 public class InvalidCoinException extends Exception {
 
