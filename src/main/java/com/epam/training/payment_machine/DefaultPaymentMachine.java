@@ -20,9 +20,17 @@ public class DefaultPaymentMachine implements PaymentMachine {
 	private Payment payment;
 	private Ticket selectedTicket;
 
-	private DefaultPaymentMachine() {
+	protected DefaultPaymentMachine() {
 		tickets = new HashMap<>();
 		state = PaymentMachineState.IDLE;
+	}
+
+	protected void setTickets(Map<Integer, Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+	protected void setAvalilableCoins(CoinContainer availableCoins) {
+		this.availableCoins = availableCoins;
 	}
 
 	public static DefaultPaymentMachine createTestPaymentMachine() {

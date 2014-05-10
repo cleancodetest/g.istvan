@@ -18,7 +18,7 @@ public class Payment {
 	}
 
 	public int getReturnAmount() {
-		if (getRemainedAmount() >= 0) {
+		if (getRemainedAmount() > 0) {
 			throw new IllegalStateException();
 		}
 		return getRemainedAmount() * -1;
