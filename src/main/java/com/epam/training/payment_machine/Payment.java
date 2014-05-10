@@ -1,20 +1,12 @@
 package com.epam.training.payment_machine;
 
 public class Payment {
-	private Ticket ticket;
+	private int amountToPay;
 	private int paidAmount;
 
-	public Payment(Ticket selectedTicket) {
+	public Payment(int amountToPay) {
 		paidAmount = 0;
-		ticket = selectedTicket;
-	}
-
-	public Ticket getTicket() {
-		return ticket;
-	}
-
-	public void setTicket(Ticket ticket) {
-		this.ticket = ticket;
+		this.amountToPay = amountToPay;
 	}
 
 	public int getPaidAmount() {
@@ -22,7 +14,7 @@ public class Payment {
 	}
 
 	public int getRemainedAmount() {
-		return ticket.getPrice() - paidAmount;
+		return amountToPay - paidAmount;
 	}
 
 	public int getReturnAmount() {
@@ -33,18 +25,10 @@ public class Payment {
 	}
 
 	public boolean isMoneyEnough() {
-		return paidAmount >= ticket.getPrice();
+		return paidAmount >= amountToPay;
 	}
 
 	public void addCoinValue(int amount) {
 		paidAmount += amount;
-		//ticket.setPaid(isPaymentPayed());
-	}
-
-	public boolean isPaid() {
-		if (ticket != null) {
-			return ticket.isPaid();
-		}
-		return false;
 	}
 }

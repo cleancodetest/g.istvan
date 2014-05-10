@@ -15,13 +15,13 @@ public class CoinContainer {
 		coinTray = new TreeMap<>(Collections.reverseOrder());
 	}
 
-	public void incrementCoin(Coin coin) {
+	public void incrementCoinInTray(Coin coin) {
 		Integer coinsCount = coinTray.get(coin);
 		coinsCount += 1;
 		coinTray.put(coin, coinsCount);
 	}
 
-	public void decrementCoin(Coin coin) {
+	public void decrementCoinInTray(Coin coin) {
 		Integer coinsCount = coinTray.get(coin);
 		coinsCount -= 1;
 		coinTray.put(coin, coinsCount);
@@ -53,30 +53,21 @@ public class CoinContainer {
 		return value > 0;
 	}
 
-	public boolean canGiveChangeBack(int coinAmount) {
-		Map<Coin, Integer> coinTraySave = new HashMap<>(coinTray);
-		boolean canGiveBack = true;
-		try {
-			doReturnCoins(coinAmount);
-		} catch (NotEnoughChangeException e) {
-			canGiveBack = false;
-		}
-		coinTray = coinTraySave;
-		return canGiveBack;
-	}
-
 	protected Map<Coin, Integer> doReturnCoins(int coinAmount) throws NotEnoughChangeException {
 		Map<Coin, Integer> dropBack = new HashMap<>();
+		Map<Coin, Integer> coinTrayOriginal = new HashMap<>(coinTray);
+		
 		while (coinAmount >= 5) {
 			Coin coin = getBiggestCoinInAmount(coinAmount);
 			if (coin != null && hasMore(coin)) {
 				coinAmount -= coin.getValue();
-				decrementCoin(coin);
+				decrementCoinInTray(coin);
 				Integer prevValue = dropBack.get(coin);
 				prevValue = prevValue == null ? new Integer(0) : prevValue;
 				dropBack.put(coin, 1 + prevValue);
 			} else {
 				if (coin.isTheSmallestValueCoin()) {
+					coinTray = coinTrayOriginal;
 					throw new NotEnoughChangeException();
 				}
 			}

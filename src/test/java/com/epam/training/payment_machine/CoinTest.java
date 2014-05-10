@@ -4,36 +4,44 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-
 public class CoinTest {
 
 	@Test
-	public void isTheSmallestValueCoinTestWhen5ShouldTrue(){
-		//given
+	public void isTheSmallestValueCoinTestWhen5ShouldTrue() {
+		// given
 		Coin coin = Coin.BANKNOTE_5;
 		boolean expected = true;
-		
-		//when
+
+		// when
 		boolean actual = coin.isTheSmallestValueCoin();
-		
-		//then
+
+		// then
 		assertEquals(actual, expected);
-		
+
 	}
-	
+
 	@Test
-	public void isTheSmallestValueCoinTestWhenNot5ShouldFalse(){
-		//given
+	public void isTheSmallestValueCoinTestWhenNot5ShouldFalse() {
+		// given
 		Coin coin = Coin.BANKNOTE_10;
 		boolean expected = false;
-		
-		//when
+
+		// when
 		boolean actual = coin.isTheSmallestValueCoin();
-		
-		//then
+
+		// then
 		assertEquals(actual, expected);
-		
+
 	}
-	
-	
+
+	@Test
+	public void valueTestWhenBanknote50Should50() {
+		// given
+		int expected = 50;
+		// when
+		int actual = Coin.BANKNOTE_50.getValue();
+		// then
+		assertEquals(actual, expected);
+	}
+
 }

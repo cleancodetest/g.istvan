@@ -7,14 +7,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.epam.training.payment_machine.exception.IllegalMachineStateException;
+import com.epam.training.payment_machine.exception.TicketIsNotSelectedException;
 import com.epam.training.payment_machine.exception.TicketNotFoundException;
 
 public class Main {
 
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static PaymentMachine pm = PaymentMachine.createTestPaymentMachine();
+	private static PaymentMachine pm = DefaultPaymentMachine.createTestPaymentMachine();
 
-	public static void main(String[] args) throws IllegalMachineStateException {
+	public static void main(String[] args) throws IllegalMachineStateException, TicketIsNotSelectedException {
 		System.out.println("----------------------");
 		System.out.println("PaymentMachine created");
 		System.out.println();
@@ -31,24 +32,26 @@ public class Main {
 					pm.selectTicket(parkingTicketId);
 				} catch (TicketNotFoundException e) {
 					System.out.println("This id is not exist, please enter other id!");
+					parkingTicketId = 0;
 				}
 			}
 
-			Ticket t = pm.getSelectedTicket();
 			System.out.print("Parking ticket is: ");
-			System.out.println(t);
+			System.out.println(pm.getTicketDetails());
 
 			Map<Coin, Integer> cashBack = new HashMap<>();
-			while (!t.isPaid()) {
+			while (!pm.isSelectedTicketPaid()) {
 				Coin insertedCoin = readCoin();
 				cashBack = pm.putCoin(insertedCoin);
-				System.out.printf("payment: %d / %d %n", pm.getPaidAmount(), t.getPrice());
+				if (pm.hasSelectedTicket()){
+					System.out.printf("payment: %d / %d %n", pm.getPaidAmount(), pm.getSelectedTicketPrice());
+				}
 			}
 			System.out.println("This ticket is paid");
 			if (cashBack.size() > 0) {
 				System.out.println("Change: ");
 				for (Entry<Coin, Integer> entry : cashBack.entrySet()) {
-					System.out.printf("banknote \"%d\"  =  %d %n", entry.getKey(), entry.getValue());
+					System.out.printf("banknote \"%d\"  =  %d %n", entry.getKey().getValue(), entry.getValue());
 				}
 			}
 			readNext = readBool("Would you like to pay for an other ticket? (true/false)");
