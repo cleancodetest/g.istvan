@@ -1,8 +1,6 @@
 package com.epam.training.payment_machine;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.epam.training.payment_machine.exception.IllegalMachineStateException;
@@ -39,11 +37,6 @@ public class DefaultPaymentMachine implements PaymentMachine {
 		machine.availableCoins = CoinContainer.createTestCoinContainer();
 
 		return machine;
-	}
-
-	@Override
-	public List<Ticket> getKnownTickets() {
-		return new ArrayList<>(tickets.values());
 	}
 
 	private Ticket getTicketById(int ticketId) throws TicketNotFoundException {
