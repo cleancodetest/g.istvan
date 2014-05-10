@@ -2,6 +2,9 @@ package com.epam.training.payment_machine;
 
 import org.testng.annotations.Test;
 
+import com.epam.training.payment_machine.ticket.Ticket;
+import com.epam.training.payment_machine.ticket.TicketPriceGenerator;
+
 import static org.testng.Assert.*;
 
 public class TicketPriceGeneratorTest {

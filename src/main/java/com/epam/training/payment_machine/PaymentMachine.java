@@ -6,6 +6,8 @@ import java.util.Map;
 import com.epam.training.payment_machine.exception.IllegalMachineStateException;
 import com.epam.training.payment_machine.exception.TicketIsNotSelectedException;
 import com.epam.training.payment_machine.exception.TicketNotFoundException;
+import com.epam.training.payment_machine.payment.Coin;
+import com.epam.training.payment_machine.ticket.Ticket;
 
 public interface PaymentMachine {
 	List<Ticket> getKnownTickets();

@@ -4,6 +4,8 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
+import com.epam.training.payment_machine.payment.Payment;
+
 public class PaymentTest {
 	
 	@Test

@@ -1,4 +1,4 @@
-package com.epam.training.payment_machine;
+package com.epam.training.payment_machine.payment;
 
 public class Payment {
 	private int amountToPay;
@@ -30,5 +30,9 @@ public class Payment {
 
 	public void addCoinValue(int amount) {
 		paidAmount += amount;
+	}
+
+	public void emptyPaidContainer() {
+		paidAmount = 0;
 	}
 }

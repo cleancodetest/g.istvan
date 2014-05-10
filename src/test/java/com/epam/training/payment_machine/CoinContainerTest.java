@@ -8,6 +8,8 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.epam.training.payment_machine.exception.NotEnoughChangeException;
+import com.epam.training.payment_machine.payment.Coin;
+import com.epam.training.payment_machine.payment.CoinContainer;
 
 public class CoinContainerTest {
 

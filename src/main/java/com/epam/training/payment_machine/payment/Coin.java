@@ -1,4 +1,4 @@
-package com.epam.training.payment_machine;
+package com.epam.training.payment_machine.payment;
 
 import com.epam.training.payment_machine.exception.InvalidCoinException;
 

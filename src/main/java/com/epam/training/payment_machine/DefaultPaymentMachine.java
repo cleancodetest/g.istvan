@@ -9,6 +9,11 @@ import com.epam.training.payment_machine.exception.IllegalMachineStateException;
 import com.epam.training.payment_machine.exception.NotEnoughChangeException;
 import com.epam.training.payment_machine.exception.TicketIsNotSelectedException;
 import com.epam.training.payment_machine.exception.TicketNotFoundException;
+import com.epam.training.payment_machine.payment.Coin;
+import com.epam.training.payment_machine.payment.CoinContainer;
+import com.epam.training.payment_machine.payment.Payment;
+import com.epam.training.payment_machine.ticket.Ticket;
+import com.epam.training.payment_machine.ticket.TicketPriceGenerator;
 
 public class DefaultPaymentMachine implements PaymentMachine {
 	private Map<Integer, Ticket> tickets;
@@ -69,22 +74,32 @@ public class DefaultPaymentMachine implements PaymentMachine {
 		if (state == PaymentMachineState.PAYING) {
 			payment.addCoinValue(coin.getValue());
 			availableCoins.incrementCoinInTray(coin);
+			dropBack = calculateDropBack();
 
-			if (payment.isMoneyEnough()) {
-
-				int coinToReturn = payment.getReturnAmount();
-				try {
-					dropBack.putAll(availableCoins.doReturnCoins(coinToReturn));
-					selectedTicket.setPaid(true);
-				} catch (NotEnoughChangeException e) {
-					// give back all money, the ticket is not paid
-				}
-				state = PaymentMachineState.IDLE;
-			}
 		}
 		else
 		{
 			dropBack.put(coin, 1);
+		}
+		return dropBack;
+	}
+
+	private Map<Coin, Integer> calculateDropBack() {
+		Map<Coin, Integer> dropBack = new HashMap<>();
+		if (payment.isMoneyEnough()) {
+			int coinToReturn = payment.getReturnAmount();
+			try {
+				dropBack.putAll(availableCoins.doReturnCoins(coinToReturn));
+				selectedTicket.setPaid(true);
+			} catch (NotEnoughChangeException e) {
+				try {
+					dropBack.putAll(availableCoins.doReturnCoins(payment.getPaidAmount()));
+				} catch (NotEnoughChangeException e1) {
+					assert false : "This is not going to happen! We can't give back the money we get.";
+				}
+				payment.emptyPaidContainer();
+			}
+			state = PaymentMachineState.IDLE;
 		}
 		return dropBack;
 	}

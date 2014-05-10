@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import com.epam.training.payment_machine.exception.IllegalMachineStateException;
 import com.epam.training.payment_machine.exception.TicketIsNotSelectedException;
 import com.epam.training.payment_machine.exception.TicketNotFoundException;
+import com.epam.training.payment_machine.ticket.Ticket;
 
 public class PaymentMachineTest {
 

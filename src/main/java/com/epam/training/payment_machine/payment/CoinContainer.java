@@ -1,4 +1,4 @@
-package com.epam.training.payment_machine;
+package com.epam.training.payment_machine.payment;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class CoinContainer {
 		return value > 0;
 	}
 
-	protected Map<Coin, Integer> doReturnCoins(int coinAmount) throws NotEnoughChangeException {
+	public Map<Coin, Integer> doReturnCoins(int coinAmount) throws NotEnoughChangeException {
 		Map<Coin, Integer> dropBack = new HashMap<>();
 		Map<Coin, Integer> coinTrayOriginal = new HashMap<>(coinTray);
 		
