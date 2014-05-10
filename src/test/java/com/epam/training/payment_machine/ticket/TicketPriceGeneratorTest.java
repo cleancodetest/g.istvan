@@ -1,4 +1,4 @@
-package com.epam.training.payment_machine;
+package com.epam.training.payment_machine.ticket;
 
 import org.testng.annotations.Test;
 
